@@ -22,14 +22,14 @@ pipeline
             }
    
         }
-        stage('Quality') 
+        /*stage('Quality') 
         {
             steps 
             {
                 sh 'mvn sonar:sonar'
             }
    
-        }
+        }*/
         
         stage('Maven Test') 
         {
