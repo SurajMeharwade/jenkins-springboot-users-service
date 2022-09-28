@@ -25,6 +25,9 @@ public class UserManager {
 		
 		user = new User("gagan","ramgiri","gagan@xmpl.com","hubli");
 		users.put(user.getId(),user);
+		
+		user = new User("manju","mankani","manju@xmpl.com","hubballi");
+		users.put(user.getId(),user);
 	}
 	
 	public Iterable<User> getAllUsers()
