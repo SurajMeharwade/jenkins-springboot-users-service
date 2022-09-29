@@ -60,7 +60,7 @@ pipeline
         {
             steps 
             {
-                sh 'docker run -dp 7070:8080 -rm --name user-service-container user-service:latest'
+                sh 'docker run -dp 7070:8080 --rm --name user-service-container user-service:latest'
             	sleep 30
             	sh 'curl -i http://localhost:7070/api/users'
             }
