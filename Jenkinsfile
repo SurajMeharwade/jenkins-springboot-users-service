@@ -56,5 +56,24 @@ pipeline
             }
    
         }
+        stage('Integration Testing') 
+        {
+            steps 
+            {
+                sh 'docker run -dp 7070:8080 -rm --name user-service-container user-service'
+            	sleep 30
+            	sh 'curl -i http://localhost:7070/api/users'
+            }
+   
+   
+        }
+    }
+    
+    post
+    {
+    	always
+    	{
+    	sh 'docker stop user-service-container'
+    	}
     }
 }
