@@ -6,7 +6,7 @@ pipeline
     {
     	DOCKER_IMG_NAME = "user-service"
     	DOCKER_CONTAINER_NAME = "user-service-container"
-    	DOCKER_REPO = '9341708657'
+    	DOCKER_REPO = "9341708657"
     }
 
     stages 
