@@ -6,6 +6,7 @@ pipeline
     {
     	DOCKER_IMG_NAME = "user-service"
     	DOCKER_CONTAINER_NAME = "user-service-container"
+    	DOCKER_REPO = '9341708657'
     }
 
     stages 
@@ -58,20 +59,31 @@ pipeline
         {
             steps 
             {
-                sh "docker build -t ${DOCKER_IMG_NAME}:latest -t ${DOCKER_IMG_NAME}:${env.BUILD_ID} ."
-            }
+                echo 'building the docker image for user-service...'
+				sh "docker build -t ${DOCKER_REPO}/${DOCKER_IMG_NAME}:${env.BUILD_ID} ."
+				sh "docker tag ${DOCKER_REPO}/${DOCKER_IMG_NAME}:${env.BUILD_ID} ${DOCKER_REPO}/${DOCKER_IMG_NAME}:latest"    
+			}
    
         }
         stage('Integration Testing') 
         {
             steps 
             {
-                sh 'docker run -dp 7070:8080 --rm --name ${DOCKER_CONTAINER_NAME} ${DOCKER_IMG_NAME}:latest'
-            	sleep 30
-            	sh 'curl -i http://localhost:7070/api/users'
+                echo 'running the user-service-container for integration testing...'
+        		sh "docker run -dp 7070:8080 --rm --name ${DOCKER_CONTAINER_NAME} ${DOCKER_REPO}/${DOCKER_IMG_NAME}:latest"
+        		sleep 30
+        		sh 'curl -i http://localhost:7070/api/users'
             }
    
    
+        }
+        
+        stage('docker publish') {
+        	steps {
+	        	withDockerRegistry([credentialsId: 'docker_creds', url: '']) {
+        			sh "docker push ${DOCKER_REPO}/${DOCKER_IMG_NAME}:${env.BUILD_ID}"
+        			sh "docker push ${DOCKER_REPO}/${DOCKER_IMG_NAME}:latest"
+        	}
         }
     }
     
@@ -80,6 +92,7 @@ pipeline
     	always
     	{
     	sh 'docker stop ${DOCKER_CONTAINER_NAME}'
+    	sh "docker rmi ${DOCKER_REPO}/${DOCKER_IMG_NAME}:latest ${DOCKER_REPO}/${DOCKER_IMG_NAME}:${env.BUILD_ID}"
     	}
     }
 }
