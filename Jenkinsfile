@@ -4,8 +4,8 @@ pipeline
     
     environment
     {
-    	DOCKER_IMG_NAME = 'user-service'
-    	DOCKER_CONTAINER_NAME = 'user-service-container'
+    	DOCKER_IMG_NAME = "user-service"
+    	DOCKER_CONTAINER_NAME = "user-service-container"
     }
 
     stages 
